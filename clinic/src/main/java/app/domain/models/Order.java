@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import java.sql.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -14,6 +15,6 @@ public class Order {
         private Patient patient;
         private User doctor;
         private Date date;
-        private OrderItem[] orderItems;
+        private List<OrderItem> orderItems;
     
 }

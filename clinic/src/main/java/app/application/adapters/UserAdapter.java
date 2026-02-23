@@ -1,6 +1,7 @@
 package app.application.adapters;
 
 import app.domain.ports.UserPort;
+import app.domain.models.User;
 
 public class UserAdapter implements UserPort {
 
@@ -19,6 +20,10 @@ public class UserAdapter implements UserPort {
     @Override
     public void save(app.domain.models.User user) {
         //aqui iria la logica para guardar el usuario en la base de datos
+    }
+    @Override
+    public User findByDocument(User user) {
+        return null;
     }
     
 }

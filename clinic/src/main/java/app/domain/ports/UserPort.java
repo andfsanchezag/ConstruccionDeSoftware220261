@@ -5,5 +5,6 @@ public interface UserPort {
     public boolean existsByDocument(String cedula);
     public boolean existsByUsername(String username);
     public void save(User user);
+    public User findByDocument(User user);
     
 }
