@@ -2,6 +2,7 @@ package app.domain.services;
 
 import app.domain.Exceptions.BusinessException;
 import app.domain.models.ItemType;
+import app.domain.models.Role;
 import app.domain.models.Order;
 import app.domain.models.User;
 import app.domain.models.Patient;
@@ -9,6 +10,8 @@ import app.domain.ports.PatientPort;
 import app.domain.ports.UserPort;
 import app.domain.models.OrderItem;
 import java.sql.Date;
+
+
 import app.domain.ports.OrderPort;
 
 public class CreateOrder {
@@ -25,6 +28,9 @@ public class CreateOrder {
         User doctor = userPort.findByDocument(order.getDoctor());
         if(doctor == null){
             throw new BusinessException("No existe el doctor");
+        }
+        if(!doctor.getRole().equals(Role.DOCTOR)){
+            throw new BusinessException("El usuario no es un doctor");
         }
         if(order.getOrderItems() == null || order.getOrderItems().isEmpty()){
             throw new BusinessException("La orden debe tener al menos un item");
