@@ -1,12 +1,21 @@
 package app.domain.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import app.domain.Exceptions.BusinessException;
 import app.domain.models.User;
 import app.domain.ports.UserPort;
 
+@Service
 public class CreateUser {
 
+    @Autowired
     private UserPort userPort;
+
+    public CreateUser(UserPort userPort) {
+        this.userPort = userPort;
+    }
 
     public void createUser(User user) throws BusinessException {
         //vamos a validar que no haya otro usuario con la misma cedula
