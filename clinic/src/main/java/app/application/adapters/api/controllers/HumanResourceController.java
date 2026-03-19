@@ -2,6 +2,7 @@ package app.application.adapters.api.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +39,11 @@ public class HumanResourceController {
     @PostMapping("/human_resources")
     public void createHumanResources(@Valid @RequestBody UserRequest userRequest) {
         humanResourcesUseCase.createHumanResources(toUser(userRequest));
+    }
+
+    @GetMapping("/")
+    public String getHumanResources() {
+        return "Lista de recursos humanos";
     }
 
     private User toUser(UserRequest userRequest) {
