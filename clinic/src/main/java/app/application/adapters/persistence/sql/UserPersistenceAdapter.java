@@ -77,6 +77,11 @@ public class UserPersistenceAdapter implements UserPort {
     }
 
     @Override
+    public User findByUsername(String username) {
+        return toModel(userRepository.findByUsername(username));
+    }
+
+    @Override
     public List<User> findAll() {
         return userRepository.findAll().stream().map(this::toModel).collect(Collectors.toList());
     }

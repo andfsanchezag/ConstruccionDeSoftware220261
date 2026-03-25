@@ -1,6 +1,7 @@
 package app.application.usecases;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import app.domain.Exceptions.BusinessException;
@@ -24,36 +25,45 @@ public class HumanResourcesUseCase {
     private DeleteUser deleteUser;
     @Autowired
     private FindUser findUser;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public HumanResourcesUseCase(CreateUser createUser, UpdateUser updateUser,
-                                  DeleteUser deleteUser, FindUser findUser) {
+                                  DeleteUser deleteUser, FindUser findUser,
+                                  PasswordEncoder passwordEncoder) {
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.deleteUser = deleteUser;
         this.findUser = findUser;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void createHumanResources(User user) throws BusinessException {
         user.setRole(Role.HUMANRESOURCES);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         createUser.createUser(user);
     }
 
     public void createDoctor(User user) throws BusinessException {
         user.setRole(Role.DOCTOR);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         createUser.createUser(user);
     }
 
     public void createNurse(User user) throws BusinessException {
         user.setRole(Role.NURSE);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         createUser.createUser(user);
     }
 
     public void createAdministrative(User user) throws BusinessException {
         user.setRole(Role.ADMINISTRATIVE);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         createUser.createUser(user);
     }
 
     public void updateUser(User user) throws BusinessException {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         updateUser.updateUser(user);
     }
 

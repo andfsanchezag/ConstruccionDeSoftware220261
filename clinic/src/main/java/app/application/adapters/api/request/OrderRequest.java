@@ -15,7 +15,8 @@ public class OrderRequest {
     @NotBlank(message = "El documento del paciente es obligatorio")
     private String patientDocument;
 
-    @NotBlank(message = "El documento del médico es obligatorio")
+    // Requerido cuando el administrativo crea la orden en nombre de un médico.
+    // Cuando un médico la crea directamente, este campo es ignorado y se toma del token JWT.
     private String doctorDocument;
 
     @NotEmpty(message = "La orden debe tener al menos un item")

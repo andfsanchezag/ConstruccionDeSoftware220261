@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import app.application.adapters.api.request.ClinicalVisitRequest;
@@ -70,8 +71,10 @@ public class NurseController {
 
     @PostMapping("/clinical-visits")
     public ResponseEntity<ClinicalVisitResponse> createClinicalVisit(
-            @Valid @RequestBody ClinicalVisitRequest request) {
-        ClinicalVisit visit = toClinicalVisit(request);
+            @Valid @RequestBody ClinicalVisitRequest request,
+            Authentication authentication) {
+        String nurseDocument = (String) authentication.getDetails();
+        ClinicalVisit visit = toClinicalVisit(request, nurseDocument);
         nurseUseCase.createClinicalVisit(visit);
         return ResponseEntity.status(HttpStatus.CREATED).body(toClinicalVisitResponse(visit));
     }
@@ -129,13 +132,13 @@ public class NurseController {
         return new OrderResponse(order.getId(), patDoc, patName, docDoc, docName, order.getDate(), items);
     }
 
-    private static ClinicalVisit toClinicalVisit(ClinicalVisitRequest req) {
+    private static ClinicalVisit toClinicalVisit(ClinicalVisitRequest req, String nurseDocument) {
         ClinicalVisit visit = new ClinicalVisit();
         Patient patient = new Patient();
         patient.setDocument(req.getPatientDocument());
         visit.setPatient(patient);
         User nurse = new User();
-        nurse.setDocument(req.getNurseDocument());
+        nurse.setDocument(nurseDocument);
         visit.setNurse(nurse);
         visit.setBloodPressure(req.getBloodPressure());
         visit.setTemperature(req.getTemperature());

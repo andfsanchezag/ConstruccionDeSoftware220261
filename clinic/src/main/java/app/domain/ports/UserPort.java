@@ -14,6 +14,7 @@ public interface UserPort {
     void update(User user);
     void deleteByDocument(String document);
     User findByDocument(String document);
+    User findByUsername(String username);
     List<User> findAll();
 
 }

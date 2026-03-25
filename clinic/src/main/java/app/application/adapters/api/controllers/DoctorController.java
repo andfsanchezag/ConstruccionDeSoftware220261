@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import app.application.adapters.api.request.ClinicalRecordRequest;
@@ -55,8 +56,10 @@ public class DoctorController {
     // ── Orders ────────────────────────────────────────────────────────────────
 
     @PostMapping("/orders")
-    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest request) {
-        Order order = toOrder(request);
+    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest request,
+                                                      Authentication authentication) {
+        String doctorDocument = (String) authentication.getDetails();
+        Order order = toOrder(request, doctorDocument);
         doctorUseCase.createOrder(order);
         return ResponseEntity.status(HttpStatus.CREATED).body(toOrderResponse(order));
     }
@@ -78,8 +81,10 @@ public class DoctorController {
 
     @PostMapping("/clinical-records")
     public ResponseEntity<ClinicalRecordResponse> createClinicalRecord(
-            @Valid @RequestBody ClinicalRecordRequest request) {
-        ClinicalRecord record = toClinicalRecord(request);
+            @Valid @RequestBody ClinicalRecordRequest request,
+            Authentication authentication) {
+        String doctorDocument = (String) authentication.getDetails();
+        ClinicalRecord record = toClinicalRecord(request, doctorDocument);
         doctorUseCase.createClinicalRecord(record);
         return ResponseEntity.status(HttpStatus.CREATED).body(toClinicalRecordResponse(record));
     }
@@ -119,13 +124,13 @@ public class DoctorController {
         );
     }
 
-    private static Order toOrder(OrderRequest req) {
+    private static Order toOrder(OrderRequest req, String doctorDocument) {
         Order order = new Order();
         Patient patient = new Patient();
         patient.setDocument(req.getPatientDocument());
         order.setPatient(patient);
         User doctor = new User();
-        doctor.setDocument(req.getDoctorDocument());
+        doctor.setDocument(doctorDocument);
         order.setDoctor(doctor);
         order.setOrderItems(req.getOrderItems().stream().map(item -> {
             OrderItem orderItem = new OrderItem();
@@ -154,13 +159,13 @@ public class DoctorController {
         return new OrderResponse(order.getId(), patDoc, patName, docDoc, docName, order.getDate(), items);
     }
 
-    private static ClinicalRecord toClinicalRecord(ClinicalRecordRequest req) {
+    private static ClinicalRecord toClinicalRecord(ClinicalRecordRequest req, String doctorDocument) {
         ClinicalRecord record = new ClinicalRecord();
         Patient patient = new Patient();
         patient.setDocument(req.getPatientDocument());
         record.setPatient(patient);
         User doctor = new User();
-        doctor.setDocument(req.getDoctorDocument());
+        doctor.setDocument(doctorDocument);
         record.setDoctor(doctor);
         record.setReason(req.getReason());
         record.setSymptoms(req.getSymptoms());
