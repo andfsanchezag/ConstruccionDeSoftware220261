@@ -20,6 +20,12 @@ public class UpdateUser {
         if (!userPort.existsByDocument(user.getDocument())) {
             throw new BusinessException("No existe un usuario con esa cedula");
         }
+        if (userPort.existsByUsernameAndDocumentNot(user.getUsername(), user.getDocument())) {
+            throw new BusinessException("Ya existe otro usuario con ese username");
+        }
+        if (userPort.existsByEmailAndDocumentNot(user.getEmail(), user.getDocument())) {
+            throw new BusinessException("Ya existe otro usuario con ese email");
+        }
         userPort.update(user);
     }
 }

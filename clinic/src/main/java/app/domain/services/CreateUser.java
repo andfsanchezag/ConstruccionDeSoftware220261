@@ -23,6 +23,9 @@ public class CreateUser {
         if (userPort.existsByUsername(user.getUsername())) {
             throw new BusinessException("Ya existe un usuario con ese username");
         }
+        if (userPort.existsByEmail(user.getEmail())) {
+            throw new BusinessException("Ya existe un usuario con ese email");
+        }
         userPort.save(user);
     }
 }

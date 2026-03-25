@@ -1,20 +1,20 @@
 package app.application.adapters.persistence.sql;
 
 import app.domain.ports.UserPort;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import app.domain.models.Role;
-import app.domain.models.User;
+import app.domain.models.identity.User;
+import app.domain.models.enums.Role;
 import app.application.adapters.persistence.sql.repositories.UserRepository;
 import app.application.adapters.persistence.sql.entities.UserEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 public class UserPersistenceAdapter implements UserPort {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserPersistenceAdapter(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -22,24 +22,64 @@ public class UserPersistenceAdapter implements UserPort {
 
     @Override
     public void save(User user) {
-        UserEntity userEntity = toEntity(user);
-        userRepository.save(userEntity);
+        userRepository.save(toEntity(user));
     }
+
     @Override
-    public boolean existsByDocument(String document){
+    public void update(User user) {
+        UserEntity existing = userRepository.findByDocument(user.getDocument());
+        if (existing != null) {
+            existing.setName(user.getName());
+            existing.setPhone(user.getPhone());
+            existing.setEmail(user.getEmail());
+            existing.setAddress(user.getAddress());
+            existing.setBirthDate(user.getBirthDate());
+            existing.setUsername(user.getUsername());
+            existing.setPassword(user.getPassword());
+            existing.setRole(user.getRole().toString());
+            userRepository.save(existing);
+        }
+    }
+
+    @Override
+    public void deleteByDocument(String document) {
+        userRepository.deleteByDocument(document);
+    }
+
+    @Override
+    public boolean existsByDocument(String document) {
         return userRepository.existsByDocument(document);
     }
+
     @Override
-    public boolean existsByUsername(String username){
+    public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
     @Override
-    public User findByDocument(User user) {
-        UserEntity userEntity = userRepository.findByDocument(user.getDocument());
-        return toModel(userEntity);
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
+    @Override
+    public boolean existsByUsernameAndDocumentNot(String username, String document) {
+        return userRepository.existsByUsernameAndDocumentNot(username, document);
+    }
+
+    @Override
+    public boolean existsByEmailAndDocumentNot(String email, String document) {
+        return userRepository.existsByEmailAndDocumentNot(email, document);
+    }
+
+    @Override
+    public User findByDocument(String document) {
+        return toModel(userRepository.findByDocument(document));
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll().stream().map(this::toModel).collect(Collectors.toList());
+    }
 
     private UserEntity toEntity(User user) {
         UserEntity userEntity = new UserEntity();
@@ -55,22 +95,19 @@ public class UserPersistenceAdapter implements UserPort {
         return userEntity;
     }
 
-    private User toModel(UserEntity userEntity) {
-        if (userEntity == null) {
-            return null;
-        }
+    private User toModel(UserEntity e) {
+        if (e == null) return null;
         User user = new User();
-        user.setName(userEntity.getName());
-        user.setDocument(userEntity.getDocument());
-        user.setPhone(userEntity.getPhone());
-        user.setEmail(userEntity.getEmail());
-        user.setAddress(userEntity.getAddress());
-        user.setBirthDate(userEntity.getBirthDate());
-        user.setUsername(userEntity.getUsername());
-        user.setPassword(userEntity.getPassword());
-        user.setRole(Role.valueOf(userEntity.getRole()));
+        user.setId(e.getId());
+        user.setName(e.getName());
+        user.setDocument(e.getDocument());
+        user.setPhone(e.getPhone());
+        user.setEmail(e.getEmail());
+        user.setAddress(e.getAddress());
+        user.setBirthDate(e.getBirthDate());
+        user.setUsername(e.getUsername());
+        user.setPassword(e.getPassword());
+        user.setRole(Role.valueOf(e.getRole()));
         return user;
     }
-
-    
 }
