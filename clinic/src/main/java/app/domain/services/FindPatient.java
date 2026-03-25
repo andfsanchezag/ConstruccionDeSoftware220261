@@ -1,6 +1,6 @@
 package app.domain.services;
 
-import app.domain.Exceptions.BusinessException;
+import app.domain.Exceptions.NotFoundException;
 import app.domain.models.patient.Patient;
 import app.domain.ports.PatientPort;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +17,10 @@ public class FindPatient {
         this.patientPort = patientPort;
     }
 
-    public Patient findByDocument(String document) throws BusinessException {
+    public Patient findByDocument(String document) throws NotFoundException {
         Patient patient = patientPort.findByDocument(document);
         if (patient == null) {
-            throw new BusinessException("No existe un paciente con esa cedula");
+            throw new NotFoundException("No existe un paciente con esa cedula");
         }
         return patient;
     }

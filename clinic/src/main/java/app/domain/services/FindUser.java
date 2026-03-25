@@ -1,6 +1,6 @@
 package app.domain.services;
 
-import app.domain.Exceptions.BusinessException;
+import app.domain.Exceptions.NotFoundException;
 import app.domain.models.identity.User;
 import app.domain.ports.UserPort;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +17,10 @@ public class FindUser {
         this.userPort = userPort;
     }
 
-    public User findByDocument(String document) throws BusinessException {
+    public User findByDocument(String document) throws NotFoundException {
         User user = userPort.findByDocument(document);
         if (user == null) {
-            throw new BusinessException("No existe un usuario con esa cedula");
+            throw new NotFoundException("No existe un usuario con esa cedula");
         }
         return user;
     }

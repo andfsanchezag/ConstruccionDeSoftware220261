@@ -1,6 +1,6 @@
 package app.domain.services;
 
-import app.domain.Exceptions.BusinessException;
+import app.domain.Exceptions.NotFoundException;
 import app.domain.models.billing.Invoice;
 import app.domain.models.patient.Patient;
 import app.domain.ports.InvoicePort;
@@ -21,18 +21,18 @@ public class FindInvoice {
         this.patientPort = patientPort;
     }
 
-    public Invoice findById(long id) throws BusinessException {
+    public Invoice findById(long id) throws NotFoundException {
         Invoice invoice = invoicePort.findById(id);
         if (invoice == null) {
-            throw new BusinessException("No existe una factura con ese id");
+            throw new NotFoundException("No existe una factura con ese id");
         }
         return invoice;
     }
 
-    public List<Invoice> findByPatient(String patientDocument) throws BusinessException {
+    public List<Invoice> findByPatient(String patientDocument) throws NotFoundException {
         Patient patient = patientPort.findByDocument(patientDocument);
         if (patient == null) {
-            throw new BusinessException("No existe un paciente con esa cedula");
+            throw new NotFoundException("No existe un paciente con esa cedula");
         }
         return invoicePort.findByPatient(patient);
     }

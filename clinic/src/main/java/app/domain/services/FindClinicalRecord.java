@@ -1,6 +1,6 @@
 package app.domain.services;
 
-import app.domain.Exceptions.BusinessException;
+import app.domain.Exceptions.NotFoundException;
 import app.domain.models.clinic.ClinicalRecord;
 import app.domain.models.patient.Patient;
 import app.domain.ports.ClinicalRecordPort;
@@ -21,10 +21,10 @@ public class FindClinicalRecord {
         this.patientPort = patientPort;
     }
 
-    public List<ClinicalRecord> findByPatient(String patientDocument) throws BusinessException {
+    public List<ClinicalRecord> findByPatient(String patientDocument) throws NotFoundException {
         Patient patient = patientPort.findByDocument(patientDocument);
         if (patient == null) {
-            throw new BusinessException("No existe un paciente con esa cedula");
+            throw new NotFoundException("No existe un paciente con esa cedula");
         }
         return clinicalRecordPort.findByPatient(patient);
     }
