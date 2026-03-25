@@ -2,6 +2,8 @@ package app.application.adapters.api.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +26,7 @@ public class UserRequest {
     @NotBlank(message = "La contraseña es obligatoria")
     private String password;
 
+    @NotNull(message = "El rol es obligatorio")
     private Role role;
 
     private long id;
@@ -39,6 +42,8 @@ public class UserRequest {
     @NotBlank(message = "La dirección es obligatoria")
     private String address;
 
+    @NotNull(message = "La fecha de nacimiento es obligatoria")
+    @Past(message = "La fecha de nacimiento debe ser en el pasado")
     private Date birthDate;
 
 }

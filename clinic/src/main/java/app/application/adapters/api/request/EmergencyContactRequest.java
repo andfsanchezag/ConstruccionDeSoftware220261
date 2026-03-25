@@ -2,6 +2,7 @@ package app.application.adapters.api.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +26,7 @@ public class EmergencyContactRequest {
 
     private String address;
 
+    @Past(message = "La fecha de nacimiento debe ser en el pasado")
     private Date birthDate;
 
     @NotBlank(message = "La relación con el paciente es obligatoria")

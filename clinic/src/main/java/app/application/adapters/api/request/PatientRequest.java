@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +31,8 @@ public class PatientRequest {
     @NotBlank(message = "La dirección es obligatoria")
     private String address;
 
+    @NotNull(message = "La fecha de nacimiento es obligatoria")
+    @Past(message = "La fecha de nacimiento debe ser en el pasado")
     private Date birthDate;
 
     @NotNull(message = "El género es obligatorio")
