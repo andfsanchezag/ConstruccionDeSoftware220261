@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import java.sql.Date;
-import app.domain.models.Role;
+import app.domain.models.enums.Role;
 
 @Getter
 @Setter

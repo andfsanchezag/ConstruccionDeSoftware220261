@@ -1,4 +1,4 @@
-package app.domain.models;
+package app.domain.models.identity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,5 +8,6 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class EmergencyContact extends Person {
+
     private String relationship;
 }

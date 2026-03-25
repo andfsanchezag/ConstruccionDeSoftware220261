@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.application.adapters.api.request.UserRequest;
 import app.application.usecases.HumanResourcesUseCase;
-import app.domain.models.User;
+import app.domain.models.identity.User;
 
 @RestController("/human_resources")
 public class HumanResourceController {
@@ -43,7 +43,7 @@ public class HumanResourceController {
 
     @GetMapping("/")
     public String getHumanResources() {
-        return "Lista de recursos humanos";
+        return "toy vivo";
     }
 
     private User toUser(UserRequest userRequest) {

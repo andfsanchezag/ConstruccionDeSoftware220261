@@ -1,5 +1,7 @@
-package app.domain.models;
+package app.domain.models.orders;
 
+import app.domain.models.enums.ItemType;
+import app.domain.models.inventory.InventoryItem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,7 +10,10 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class OrderItem {
+
     private long id;
-    private Item item;
+
+    private InventoryItem inventoryItem;
+
     private ItemType itemType;
 }
