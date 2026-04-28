@@ -1,7 +1,7 @@
 package app.application.adapters.persistence.sql;
 
-import app.domain.ports.UserPort;
 import app.domain.models.identity.User;
+import app.domain.ports.out.UserPort;
 import app.domain.models.enums.Role;
 import app.application.adapters.persistence.sql.repositories.UserRepository;
 import app.application.adapters.persistence.sql.entities.UserEntity;

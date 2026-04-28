@@ -16,7 +16,7 @@ import app.domain.services.FindPatient;
 import java.util.List;
 
 @Service
-public class NurseUseCase {
+public class NurseUseCase implements app.domain.ports.in.NurseUseCase {
 
     @Autowired
     private FindPatient findPatient;
@@ -35,26 +35,32 @@ public class NurseUseCase {
         this.findClinicalRecord = findClinicalRecord;
     }
 
+    @Override
     public Patient findPatientByDocument(String document) throws BusinessException {
         return findPatient.findByDocument(document);
     }
 
+    @Override
     public List<Patient> findAllPatients() {
         return findPatient.findAll();
     }
 
+    @Override
     public Order findOrderById(long id) throws BusinessException {
         return findOrder.findById(id);
     }
 
+    @Override
     public List<Order> findOrdersByPatient(String patientDocument) throws BusinessException {
         return findOrder.findByPatient(patientDocument);
     }
 
+    @Override
     public void createClinicalVisit(ClinicalVisit visit) throws BusinessException {
         createClinicalVisit.createClinicalVisit(visit);
     }
 
+    @Override
     public List<ClinicalRecord> findClinicalRecordsByPatient(String patientDocument) throws BusinessException {
         return findClinicalRecord.findByPatient(patientDocument);
     }

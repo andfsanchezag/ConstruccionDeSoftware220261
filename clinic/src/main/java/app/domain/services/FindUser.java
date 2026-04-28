@@ -2,7 +2,8 @@ package app.domain.services;
 
 import app.domain.Exceptions.NotFoundException;
 import app.domain.models.identity.User;
-import app.domain.ports.UserPort;
+import app.domain.ports.out.UserPort;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

@@ -1,4 +1,4 @@
-package app.domain.ports;
+package app.domain.ports.out;
 
 import app.domain.models.orders.Order;
 import app.domain.models.patient.Patient;

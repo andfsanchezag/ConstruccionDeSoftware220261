@@ -3,8 +3,9 @@ package app.domain.services;
 import app.domain.Exceptions.NotFoundException;
 import app.domain.models.orders.Order;
 import app.domain.models.patient.Patient;
-import app.domain.ports.OrderPort;
-import app.domain.ports.PatientPort;
+import app.domain.ports.out.OrderPort;
+import app.domain.ports.out.PatientPort;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

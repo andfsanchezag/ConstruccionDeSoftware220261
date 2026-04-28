@@ -10,17 +10,16 @@ import app.domain.models.inventory.Specialty;
 import app.domain.models.orders.Order;
 import app.domain.models.orders.OrderItem;
 import app.domain.models.patient.Patient;
-import app.domain.ports.OrderPort;
+import app.domain.ports.out.OrderPort;
+import app.application.adapters.persistence.sql.entities.DiagnosticSupportEntity;
 import app.application.adapters.persistence.sql.entities.InventoryItemEntity;
 import app.application.adapters.persistence.sql.entities.MedicineEntity;
 import app.application.adapters.persistence.sql.entities.OrderEntity;
 import app.application.adapters.persistence.sql.entities.OrderItemEntity;
 import app.application.adapters.persistence.sql.entities.PatientEntity;
 import app.application.adapters.persistence.sql.entities.ProcedureEntity;
-import app.application.adapters.persistence.sql.repositories.InventoryItemRepository;
+import app.application.adapters.persistence.sql.entities.UserEntity;
 import app.application.adapters.persistence.sql.repositories.OrderRepository;
-import app.application.adapters.persistence.sql.repositories.PatientRepository;
-import app.application.adapters.persistence.sql.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,16 +29,9 @@ import java.util.stream.Collectors;
 public class OrderPersistenceAdapter implements OrderPort {
 
     private final OrderRepository orderRepository;
-    private final PatientRepository patientRepository;
-    private final UserRepository userRepository;
-    private final InventoryItemRepository inventoryItemRepository;
 
-    public OrderPersistenceAdapter(OrderRepository orderRepository, PatientRepository patientRepository,
-                                   UserRepository userRepository, InventoryItemRepository inventoryItemRepository) {
+    public OrderPersistenceAdapter(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        this.patientRepository = patientRepository;
-        this.userRepository = userRepository;
-        this.inventoryItemRepository = inventoryItemRepository;
     }
 
     @Override
@@ -54,7 +46,8 @@ public class OrderPersistenceAdapter implements OrderPort {
 
     @Override
     public List<Order> findByPatient(Patient patient) {
-        PatientEntity patientEntity = patientRepository.findByDocument(patient.getDocument());
+        PatientEntity patientEntity = new PatientEntity();
+        patientEntity.setId(patient.getId());
         return orderRepository.findByPatient(patientEntity).stream()
                 .map(this::toModel).collect(Collectors.toList());
     }
@@ -63,24 +56,40 @@ public class OrderPersistenceAdapter implements OrderPort {
         OrderEntity e = new OrderEntity();
         e.setDate(order.getDate());
         if (order.getPatient() != null) {
-            e.setPatient(patientRepository.findByDocument(order.getPatient().getDocument()));
+            PatientEntity patientEntity = new PatientEntity();
+            patientEntity.setId(order.getPatient().getId());
+            e.setPatient(patientEntity);
         }
         if (order.getDoctor() != null) {
-            e.setDoctor(userRepository.findByDocument(order.getDoctor().getDocument()));
+            UserEntity userEntity = new UserEntity();
+            userEntity.setId(order.getDoctor().getId());
+            e.setDoctor(userEntity);
         }
         if (order.getOrderItems() != null) {
             List<OrderItemEntity> items = order.getOrderItems().stream().map(item -> {
                 OrderItemEntity oi = new OrderItemEntity();
                 oi.setItemType(item.getItemType() != null ? item.getItemType().toString() : null);
                 if (item.getInventoryItem() != null) {
-                    inventoryItemRepository.findById(item.getInventoryItem().getId())
-                            .ifPresent(oi::setInventoryItem);
+                    oi.setInventoryItem(toInventoryItemStub(item.getInventoryItem()));
                 }
                 return oi;
             }).collect(Collectors.toList());
             e.setOrderItems(items);
         }
         return e;
+    }
+
+    private InventoryItemEntity toInventoryItemStub(InventoryItem item) {
+        InventoryItemEntity stub;
+        if (item instanceof Medicine) {
+            stub = new MedicineEntity();
+        } else if (item instanceof Procedure) {
+            stub = new ProcedureEntity();
+        } else {
+            stub = new DiagnosticSupportEntity();
+        }
+        stub.setId(item.getId());
+        return stub;
     }
 
     private Order toModel(OrderEntity e) {

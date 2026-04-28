@@ -6,9 +6,10 @@ import app.domain.models.billing.InvoiceItem;
 import app.domain.models.patient.Patient;
 import app.domain.models.patient.Policy;
 import app.domain.models.patient.PolicyHistory;
-import app.domain.ports.InvoicePort;
-import app.domain.ports.PatientPort;
-import app.domain.ports.PolicyHistoryPort;
+import app.domain.ports.out.InvoicePort;
+import app.domain.ports.out.PatientPort;
+import app.domain.ports.out.PolicyHistoryPort;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

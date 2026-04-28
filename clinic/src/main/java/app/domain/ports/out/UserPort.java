@@ -1,4 +1,4 @@
-package app.domain.ports;
+package app.domain.ports.out;
 
 import app.domain.models.identity.User;
 import java.util.List;

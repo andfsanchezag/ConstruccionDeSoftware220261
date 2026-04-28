@@ -2,7 +2,8 @@ package app.domain.services;
 
 import app.domain.Exceptions.BusinessException;
 import app.domain.models.patient.Policy;
-import app.domain.ports.PolicyPort;
+import app.domain.ports.out.PolicyPort;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

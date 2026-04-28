@@ -1,7 +1,7 @@
 package app.application.adapters.persistence.sql;
 
 import app.domain.models.identity.EmergencyContact;
-import app.domain.ports.ContactEmergencyPort;
+import app.domain.ports.out.ContactEmergencyPort;
 import app.application.adapters.persistence.sql.entities.EmergencyContactEntity;
 import app.application.adapters.persistence.sql.repositories.EmergencyContactRepository;
 import org.springframework.stereotype.Service;

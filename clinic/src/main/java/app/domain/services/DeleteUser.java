@@ -1,7 +1,8 @@
 package app.domain.services;
 
 import app.domain.Exceptions.BusinessException;
-import app.domain.ports.UserPort;
+import app.domain.ports.out.UserPort;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

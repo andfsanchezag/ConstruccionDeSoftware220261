@@ -3,8 +3,9 @@ package app.domain.services;
 import app.domain.Exceptions.BusinessException;
 import app.domain.models.identity.EmergencyContact;
 import app.domain.models.patient.Patient;
-import app.domain.ports.ContactEmergencyPort;
-import app.domain.ports.PatientPort;
+import app.domain.ports.out.ContactEmergencyPort;
+import app.domain.ports.out.PatientPort;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

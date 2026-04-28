@@ -7,9 +7,10 @@ import app.domain.models.orders.Order;
 import app.domain.models.orders.OrderItem;
 import app.domain.models.identity.User;
 import app.domain.models.patient.Patient;
-import app.domain.ports.PatientPort;
-import app.domain.ports.UserPort;
-import app.domain.ports.OrderPort;
+import app.domain.ports.out.OrderPort;
+import app.domain.ports.out.PatientPort;
+import app.domain.ports.out.UserPort;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

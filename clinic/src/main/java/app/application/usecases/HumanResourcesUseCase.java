@@ -15,7 +15,7 @@ import app.domain.services.UpdateUser;
 import java.util.List;
 
 @Service
-public class HumanResourcesUseCase {
+public class HumanResourcesUseCase implements app.domain.ports.in.HumanResourcesUseCase {
 
     @Autowired
     private CreateUser createUser;
@@ -38,43 +38,51 @@ public class HumanResourcesUseCase {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public void createHumanResources(User user) throws BusinessException {
         user.setRole(Role.HUMANRESOURCES);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         createUser.createUser(user);
     }
 
+    @Override
     public void createDoctor(User user) throws BusinessException {
         user.setRole(Role.DOCTOR);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         createUser.createUser(user);
     }
 
+    @Override
     public void createNurse(User user) throws BusinessException {
         user.setRole(Role.NURSE);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         createUser.createUser(user);
     }
 
+    @Override
     public void createAdministrative(User user) throws BusinessException {
         user.setRole(Role.ADMINISTRATIVE);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         createUser.createUser(user);
     }
 
+    @Override
     public void updateUser(User user) throws BusinessException {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         updateUser.updateUser(user);
     }
 
+    @Override
     public void deleteUser(String document) throws BusinessException {
         deleteUser.deleteUser(document);
     }
 
+    @Override
     public User findUserByDocument(String document) throws BusinessException {
         return findUser.findByDocument(document);
     }
 
+    @Override
     public List<User> findAllUsers() {
         return findUser.findAll();
     }

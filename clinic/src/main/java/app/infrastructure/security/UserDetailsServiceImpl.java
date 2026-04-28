@@ -1,7 +1,8 @@
 package app.infrastructure.security;
 
 import app.domain.models.identity.User;
-import app.domain.ports.UserPort;
+import app.domain.ports.out.UserPort;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

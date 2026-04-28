@@ -2,7 +2,7 @@ package app.application.adapters.persistence.sql;
 
 import app.domain.models.patient.Company;
 import app.domain.models.patient.Policy;
-import app.domain.ports.PolicyPort;
+import app.domain.ports.out.PolicyPort;
 import app.application.adapters.persistence.sql.entities.CompanyEntity;
 import app.application.adapters.persistence.sql.entities.PolicyEntity;
 import app.application.adapters.persistence.sql.repositories.PolicyRepository;

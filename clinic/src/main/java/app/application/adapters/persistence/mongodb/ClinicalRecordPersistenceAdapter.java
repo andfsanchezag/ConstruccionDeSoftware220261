@@ -4,7 +4,7 @@ import app.domain.models.clinic.ClinicalRecord;
 import app.domain.models.identity.User;
 import app.domain.models.orders.Order;
 import app.domain.models.patient.Patient;
-import app.domain.ports.ClinicalRecordPort;
+import app.domain.ports.out.ClinicalRecordPort;
 import app.application.adapters.persistence.mongodb.documents.ClinicalRecordDocument;
 import app.application.adapters.persistence.mongodb.documents.ClinicalRecordDocument.RecordEntry;
 import app.application.adapters.persistence.mongodb.repositories.ClinicalRecordMongoRepository;

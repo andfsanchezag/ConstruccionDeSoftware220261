@@ -2,10 +2,9 @@ package app.application.adapters.persistence.sql;
 
 import app.domain.models.patient.Patient;
 import app.domain.models.patient.PolicyHistory;
-import app.domain.ports.PolicyHistoryPort;
+import app.domain.ports.out.PolicyHistoryPort;
 import app.application.adapters.persistence.sql.entities.PatientEntity;
 import app.application.adapters.persistence.sql.entities.PolicyHistoryEntity;
-import app.application.adapters.persistence.sql.repositories.PatientRepository;
 import app.application.adapters.persistence.sql.repositories.PolicyHistoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +12,15 @@ import org.springframework.stereotype.Service;
 public class PolicyHistoryPersistenceAdapter implements PolicyHistoryPort {
 
     private final PolicyHistoryRepository repository;
-    private final PatientRepository patientRepository;
 
-    public PolicyHistoryPersistenceAdapter(PolicyHistoryRepository repository, PatientRepository patientRepository) {
+    public PolicyHistoryPersistenceAdapter(PolicyHistoryRepository repository) {
         this.repository = repository;
-        this.patientRepository = patientRepository;
     }
 
     @Override
     public PolicyHistory findByPatientAndYear(Patient patient, int year) {
-        PatientEntity patientEntity = patientRepository.findByDocument(patient.getDocument());
+        PatientEntity patientEntity = new PatientEntity();
+        patientEntity.setId(patient.getId());
         return repository.findByPatientAndYear(patientEntity, year)
                 .map(this::toModel).orElse(null);
     }
@@ -43,7 +41,8 @@ public class PolicyHistoryPersistenceAdapter implements PolicyHistoryPort {
 
     private PolicyHistoryEntity toEntity(PolicyHistory ph) {
         PolicyHistoryEntity e = new PolicyHistoryEntity();
-        PatientEntity patientEntity = patientRepository.findByDocument(ph.getPatient().getDocument());
+        PatientEntity patientEntity = new PatientEntity();
+        patientEntity.setId(ph.getPatient().getId());
         e.setPatient(patientEntity);
         e.setYear(ph.getYear());
         e.setAccumulatedCopayment(ph.getAccumulatedCopayment());

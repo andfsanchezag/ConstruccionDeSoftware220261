@@ -5,7 +5,7 @@ import app.domain.models.identity.EmergencyContact;
 import app.domain.models.patient.Company;
 import app.domain.models.patient.Patient;
 import app.domain.models.patient.Policy;
-import app.domain.ports.PatientPort;
+import app.domain.ports.out.PatientPort;
 import app.application.adapters.persistence.sql.entities.CompanyEntity;
 import app.application.adapters.persistence.sql.entities.EmergencyContactEntity;
 import app.application.adapters.persistence.sql.entities.PatientEntity;

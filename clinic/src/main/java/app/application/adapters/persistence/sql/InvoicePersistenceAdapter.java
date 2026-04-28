@@ -7,15 +7,14 @@ import app.domain.models.identity.User;
 import app.domain.models.orders.Order;
 import app.domain.models.patient.Patient;
 import app.domain.models.patient.Policy;
-import app.domain.ports.InvoicePort;
+import app.domain.ports.out.InvoicePort;
 import app.application.adapters.persistence.sql.entities.InvoiceEntity;
 import app.application.adapters.persistence.sql.entities.InvoiceItemEntity;
+import app.application.adapters.persistence.sql.entities.OrderEntity;
 import app.application.adapters.persistence.sql.entities.PatientEntity;
+import app.application.adapters.persistence.sql.entities.PolicyEntity;
+import app.application.adapters.persistence.sql.entities.UserEntity;
 import app.application.adapters.persistence.sql.repositories.InvoiceRepository;
-import app.application.adapters.persistence.sql.repositories.OrderRepository;
-import app.application.adapters.persistence.sql.repositories.PatientRepository;
-import app.application.adapters.persistence.sql.repositories.PolicyRepository;
-import app.application.adapters.persistence.sql.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,19 +24,9 @@ import java.util.stream.Collectors;
 public class InvoicePersistenceAdapter implements InvoicePort {
 
     private final InvoiceRepository invoiceRepository;
-    private final PatientRepository patientRepository;
-    private final UserRepository userRepository;
-    private final PolicyRepository policyRepository;
-    private final OrderRepository orderRepository;
 
-    public InvoicePersistenceAdapter(InvoiceRepository invoiceRepository, PatientRepository patientRepository,
-                                     UserRepository userRepository, PolicyRepository policyRepository,
-                                     OrderRepository orderRepository) {
+    public InvoicePersistenceAdapter(InvoiceRepository invoiceRepository) {
         this.invoiceRepository = invoiceRepository;
-        this.patientRepository = patientRepository;
-        this.userRepository = userRepository;
-        this.policyRepository = policyRepository;
-        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -52,7 +41,8 @@ public class InvoicePersistenceAdapter implements InvoicePort {
 
     @Override
     public List<Invoice> findByPatient(Patient patient) {
-        PatientEntity patientEntity = patientRepository.findByDocument(patient.getDocument());
+        PatientEntity patientEntity = new PatientEntity();
+        patientEntity.setId(patient.getId());
         return invoiceRepository.findByPatient(patientEntity).stream()
                 .map(this::toModel).collect(Collectors.toList());
     }
@@ -66,13 +56,19 @@ public class InvoicePersistenceAdapter implements InvoicePort {
         e.setPatientPayment(invoice.getPatientPayment());
         e.setPolicyApplied(invoice.isPolicyApplied());
         if (invoice.getPatient() != null) {
-            e.setPatient(patientRepository.findByDocument(invoice.getPatient().getDocument()));
+            PatientEntity patientEntity = new PatientEntity();
+            patientEntity.setId(invoice.getPatient().getId());
+            e.setPatient(patientEntity);
         }
         if (invoice.getDoctor() != null) {
-            e.setDoctor(userRepository.findByDocument(invoice.getDoctor().getDocument()));
+            UserEntity userEntity = new UserEntity();
+            userEntity.setId(invoice.getDoctor().getId());
+            e.setDoctor(userEntity);
         }
         if (invoice.getPolicy() != null) {
-            policyRepository.findById(invoice.getPolicy().getId()).ifPresent(e::setPolicy);
+            PolicyEntity policyEntity = new PolicyEntity();
+            policyEntity.setId(invoice.getPolicy().getId());
+            e.setPolicy(policyEntity);
         }
         if (invoice.getItems() != null) {
             List<InvoiceItemEntity> items = invoice.getItems().stream().map(item -> {
@@ -83,7 +79,9 @@ public class InvoicePersistenceAdapter implements InvoicePort {
                 ii.setUnitPrice(item.getUnitPrice());
                 ii.setTotalPrice(item.getTotalPrice());
                 if (item.getOrder() != null) {
-                    orderRepository.findById(item.getOrder().getId()).ifPresent(ii::setOrder);
+                    OrderEntity orderEntity = new OrderEntity();
+                    orderEntity.setId(item.getOrder().getId());
+                    ii.setOrder(orderEntity);
                 }
                 return ii;
             }).collect(Collectors.toList());

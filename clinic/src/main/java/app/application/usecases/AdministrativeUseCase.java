@@ -25,7 +25,7 @@ import app.domain.services.UpdatePolicy;
 import java.util.List;
 
 @Service
-public class AdministrativeUseCase {
+public class AdministrativeUseCase implements app.domain.ports.in.AdministrativeUseCase {
 
     @Autowired
     private CreatePatient createPatient;
@@ -73,62 +73,77 @@ public class AdministrativeUseCase {
         this.findInvoice = findInvoice;
     }
 
+    @Override
     public void createPatient(Patient patient) throws BusinessException {
         createPatient.createPatient(patient);
     }
 
+    @Override
     public void updatePatient(Patient patient) throws BusinessException {
         updatePatient.updatePatient(patient);
     }
 
+    @Override
     public void deletePatient(String document) throws BusinessException {
         deletePatient.deletePatient(document);
     }
 
+    @Override
     public Patient findPatientByDocument(String document) throws BusinessException {
         return findPatient.findByDocument(document);
     }
 
+    @Override
     public List<Patient> findAllPatients() {
         return findPatient.findAll();
     }
 
+    @Override
     public void createEmergencyContact(EmergencyContact emergencyContact) throws BusinessException {
         createEmergencyContact.createEmergencyContact(emergencyContact);
     }
 
+    @Override
     public void updateEmergencyContact(String patientDocument, EmergencyContact emergencyContact) throws BusinessException {
         updateEmergencyContact.updateEmergencyContact(patientDocument, emergencyContact);
     }
 
+    @Override
     public void createPolicy(String patientDocument, Policy policy) throws BusinessException {
         createPolicy.createPolicy(patientDocument, policy);
     }
 
+    @Override
     public void updatePolicy(Policy policy) throws BusinessException {
         updatePolicy.updatePolicy(policy);
     }
 
+    @Override
     public void createOrder(Order order) throws BusinessException {
         createOrder.createOrder(order);
     }
 
+    @Override
     public Order findOrderById(long id) throws BusinessException {
         return findOrder.findById(id);
     }
 
+    @Override
     public List<Order> findOrdersByPatient(String patientDocument) throws BusinessException {
         return findOrder.findByPatient(patientDocument);
     }
 
+    @Override
     public void createInvoice(Invoice invoice) throws BusinessException {
         createInvoice.createInvoice(invoice);
     }
 
+    @Override
     public Invoice findInvoiceById(long id) throws BusinessException {
         return findInvoice.findById(id);
     }
 
+    @Override
     public List<Invoice> findInvoicesByPatient(String patientDocument) throws BusinessException {
         return findInvoice.findByPatient(patientDocument);
     }
